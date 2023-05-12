@@ -1,0 +1,33 @@
+.signup{
+    /* width: 500px;  */
+    /* margin: auto; */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  
+    justify-content: center;
+    align-items: center;
+}
+.form{
+    width: 400px; 
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+    text-align: left;
+    padding: 1rem;
+    border: 1px solid grey;
+}
+.heading{
+    text-align: center;
+}
+.btnSignUp{
+    width: 80%;
+    margin: auto;
+    border-radius: 30px;
+    margin-top:1rem ;
+}
+.accountbtn{
+    margin-top:1rem ;
+    width: 400px;
+    border-radius: 5px;
+}

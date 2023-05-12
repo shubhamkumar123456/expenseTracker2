@@ -1,0 +1,9 @@
+.navbar{
+    height: 4rem;
+}
+.navbar ul{
+    display: flex;
+    gap:1rem;
+    list-style:none;
+    background-color:beige
+}
