@@ -29,7 +29,7 @@ const Login = () => {
             })
             if(response.ok){
                 let data=await response.json();
-                console.log(data.idToken)
+                // console.log(data.idToken)
                 localStorage.setItem('authToken', data.idToken)
                 navigate('/dummypage')
                

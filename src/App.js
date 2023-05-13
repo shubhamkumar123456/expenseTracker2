@@ -7,6 +7,8 @@ import Signup from './pages/Signup';
 import DummyPage from './pages/DummyPage';
 
 function App() {
+
+    const authToken = localStorage.getItem('authToken');
   return (
     <div className="App">
       <BrowserRouter>
@@ -15,6 +17,7 @@ function App() {
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/dummypage' element={<DummyPage/>}/>
+        <Route path='/' element={<Login/>}/>
 
       </Routes>
  
