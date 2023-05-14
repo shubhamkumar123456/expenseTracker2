@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import classes from './DummyPage.module.css'
 
@@ -11,6 +11,28 @@ const DummyPage = () => {
   console.log(ID_TOKEN)
 
   const [showForm, setshowForm] = useState(false);
+  const [getUserName, setgetUserName] = useState("");
+  const [getPicUrl, setgetPicUrl] = useState("");
+
+  useEffect(()=>{
+    const fetchData=async()=>{
+      const response=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDLkoEIUdeBt-N8rc118amjIyeboq9E9GA',{
+        method: 'POST',
+        body: JSON.stringify({
+        "idToken":ID_TOKEN,
+        })
+      })
+    
+      const data=await response.json();
+      console.log(data.users[0].displayName);
+      console.log(data.users[0].photoUrl);
+      const getDisplayName=data.users[0].displayName;
+      setgetUserName(getDisplayName)
+      const getPhotoUrl=data.users[0].photoUrl;
+      setgetPicUrl(getPhotoUrl)
+    }
+    fetchData()
+  },[])
 
 
   const handleClick=(e)=>{
@@ -33,9 +55,9 @@ const DummyPage = () => {
       
     })
     const data=await response.json();
-    console.log(data);
+    // console.log(data);
   } catch (error) {
-    
+    console.log(error.message);
   }
      
 
@@ -47,9 +69,9 @@ const DummyPage = () => {
    {showForm && <form className={classes.form}>
         <h1>Contact Details</h1>
         <label htmlFor="">Full Name
-      <input type="text" ref={fullNameRef} /></label>
+      <input type="text" ref={fullNameRef} value={getUserName} /></label>
       <label htmlFor="">Profile Photo URL
-      <input type="text"  ref={profilePhotoUrl}/></label>
+      <input type="text"  ref={profilePhotoUrl} value={getPicUrl}/></label>
       <button style={{color:"red", background:"white", border:"2px solid red",borderRadius:"5px"}}>Cancel</button>
       <br />
       <button className={`btn btn-danger ${classes.btnUpdate}`} onClick={handleUpdateClick}>update</button>
