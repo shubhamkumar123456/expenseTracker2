@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import DummyPage from './pages/DummyPage';
 import ForgetPassword from './components/ForgetPassword';
+import ExpensePage from './pages/ExpensePage';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path='/dummypage' element={<DummyPage/>}/>
         <Route path='/' element={<Login/>}/>
         <Route path='/forgetpassword' element={<ForgetPassword/>}/>
+        <Route path='/expensepage' element={<ExpensePage/>}/>
 
       </Routes>
  

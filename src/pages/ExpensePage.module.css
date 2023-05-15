@@ -1,0 +1,17 @@
+.expensePageForm{
+    background-color: black;
+    padding: 1rem;
+    color: white;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 70%;
+    margin: auto;
+    border-radius: 30px;
+}
+.expensePageForm input{
+    border-radius: 10px;
+}
+.idInput{
+    width: 50px;
+}

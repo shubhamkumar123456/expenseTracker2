@@ -31,7 +31,7 @@ const Login = () => {
                 let data=await response.json();
                 // console.log(data.idToken)
                 localStorage.setItem('authToken', data.idToken)
-                navigate('/dummypage')
+                navigate('/expensepage')
                
             }
             else{

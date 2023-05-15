@@ -1,0 +1,18 @@
+.expenseItem{
+    background-color: black;
+    width: 80%;
+    margin: 1rem auto;
+    color: white;
+    border-radius: 10px;
+    
+}
+.headings{
+    display: flex;
+    justify-content: space-evenly;
+    text-decoration: underline;
+}
+.expenseItemItem{
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+}
