@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import DummyPage from './pages/DummyPage';
+import ForgetPassword from './components/ForgetPassword';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/dummypage' element={<DummyPage/>}/>
         <Route path='/' element={<Login/>}/>
+        <Route path='/forgetpassword' element={<ForgetPassword/>}/>
 
       </Routes>
  

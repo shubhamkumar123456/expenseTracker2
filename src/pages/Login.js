@@ -55,7 +55,7 @@ const Login = () => {
   <input type="password" ref={passwordRef} /></label>
  
 <button className={`${classes.btnSignUp} btn btn-primary`} type='submit' >Login</button>
-<a style={{textAlign:"center"}}>Forgot Password</a>
+<Link to='/forgetpassword' style={{textAlign:"center"}}>Forgot Password</Link>
     </form>
     <Link to="/signup"><button className={classes.accountbtn}>Don't have an account?SignUp </button></Link>
 </div>
