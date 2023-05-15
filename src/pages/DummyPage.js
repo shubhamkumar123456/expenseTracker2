@@ -59,13 +59,38 @@ const DummyPage = () => {
   } catch (error) {
     console.log(error.message);
   }
-     
-
 }
+
+const handleVarifyClick=async()=>{
+try {
+  const response=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDLkoEIUdeBt-N8rc118amjIyeboq9E9GA',{
+    method: 'POST',
+    body: JSON.stringify({
+      requestType:"VERIFY_EMAIL",
+      idToken:ID_TOKEN,
+    })
+   
+  })
+  if(response.ok){
+    const data=await response.json();
+    console.log(data);
+  }
+  else{
+    const data=await response.json();
+    console.log(data.error.message);
+  }
+} catch (error) {
+  alert(error.message);
+}
+}
+
   return (
     <div className={classes.dummyPage}>
      <h2> Welcome to Expense Tracker!!!</h2>
     <p> your profile is Incomplete<button onClick={handleClick}>Complete now</button></p>
+    <div>
+      <p>Varify Email: <button onClick={handleVarifyClick}>click here</button></p>
+    </div>
    {showForm && <form className={classes.form}>
         <h1>Contact Details</h1>
         <label htmlFor="">Full Name
