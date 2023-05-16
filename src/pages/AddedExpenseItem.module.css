@@ -8,11 +8,41 @@
 }
 .headings{
     display: flex;
-    justify-content: space-evenly;
+    gap:12rem;
+    margin-left: 9rem;
     text-decoration: underline;
+}
+.headings p{
+    width: 100px;
+    font-style: italic;
+    font-weight: 600;
+    /* background-color: aqua; */
 }
 .expenseItemItem{
     display: flex;
-    justify-content: space-evenly;
-    text-align: center;
+    justify-content:space-evenly ;
+}
+.expenseItemItem p{
+    width: 100px;
+    /* background-color: aqua; */
+}
+.btnDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:1rem
+}
+.updatedForm{
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    width:400px;
+    position:absolute;
+    top:40px;
+    left:40%;
+    padding: 2rem;
+    border-radius: 20px;
+}
+.updatedForm button{
+    margin-top: 1rem;
 }

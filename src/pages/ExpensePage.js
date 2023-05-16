@@ -24,9 +24,17 @@ const ExpensePage = () => {
         let arr=[];
         for(let key in data) {
           // console.log(key, data[key]);
-          arr.push(data[key]);
+          // console.log(key);
+          let newobj={
+            id:key,
+            amount:data[key].amount,
+            category:data[key].category,
+            description:data[key].description
+          }
+          arr.push(newobj);
         }
         // console.log(data)
+        console.log(arr)
         setitem(arr)
       }
       fetchData();
