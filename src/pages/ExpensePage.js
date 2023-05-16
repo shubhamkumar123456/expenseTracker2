@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import classes from "./ExpensePage.module.css";
 import AddedExpenseItem from "./AddedExpenseItem";
 
@@ -11,7 +11,29 @@ const ExpensePage = () => {
 
     const [item, setitem] = useState([]);
 
-const handlesubmit=(e)=>{
+    useEffect(()=>{
+      const fetchData=async()=>{
+        const response=await fetch('https://expense-tracker-c65c2-default-rtdb.firebaseio.com/expenseItems.json',{
+          method: 'GET',
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        });
+        const data=await response.json();
+        // console.log(data)
+        let arr=[];
+        for(let key in data) {
+          // console.log(key, data[key]);
+          arr.push(data[key]);
+        }
+        // console.log(data)
+        setitem(arr)
+      }
+      fetchData();
+     
+    },[])
+
+const handlesubmit=async(e)=>{
     e.preventDefault();
     let obj={
         id:idRef.current.value,
@@ -20,9 +42,23 @@ const handlesubmit=(e)=>{
         category:categoryRef.current.value
     }
     // console.log(obj);
-    setitem([...item,obj])
+  try {
+    const response=await fetch('https://expense-tracker-c65c2-default-rtdb.firebaseio.com/expenseItems.json',{
+      method: 'POST',
+      body: JSON.stringify(obj),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
+    const data=await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+  setitem([...item,obj])
 }
-console.log(item)
+// console.log(item)
+
   return (
     <div>
       <form className={classes.expensePageForm} action="" onSubmit={handlesubmit}>
