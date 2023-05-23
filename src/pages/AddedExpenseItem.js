@@ -53,6 +53,10 @@ const AddedExpenseItem = (props) => {
       
     }
   }
+  let sum=0;
+  props.item.forEach((item)=>{
+    sum+=+item.amount
+  })
   return (
     <div className={classes.expenseItem}>
      <div className={classes.headings}>
@@ -61,8 +65,10 @@ const AddedExpenseItem = (props) => {
       <p>Category</p>
      </div>
       {props.item.map((ele)=>{
+      
         return(
             <div key={ele.id} className={classes.expenseItemItem}>
+                  
                 <p>{ele.amount}</p>
                 <p style={{width:"200px"}}>{ele.description}</p>
                 <p>{ele.category}</p>
@@ -71,7 +77,10 @@ const AddedExpenseItem = (props) => {
                 <button className='btn btn-danger' onClick={()=>{handleDelete(ele.id)}}>Delete</button></div>
             </div>
         )
+    
       })}
+      
+      <p>total={sum<10000 ? sum:<button>activate premium</button>}</p>
    {updated && <form action="" className={classes.updatedForm}>
         <h1>Enter the updated values here</h1>
         <label htmlFor="">Amount</label>

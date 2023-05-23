@@ -1,12 +1,15 @@
 import React, { useRef } from 'react'
-import { Link, redirect,useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { authActions } from '../store/auth';
 
 
 import classes from './Login.module.css'
-import DummyPage from './DummyPage';
+
 
 
 const Login = () => {
+    const dispatch = useDispatch()
     const emailRef=useRef()
     const passwordRef=useRef()
 
@@ -29,8 +32,11 @@ const Login = () => {
             })
             if(response.ok){
                 let data=await response.json();
-                // console.log(data.idToken)
+                console.log(data)
                 localStorage.setItem('authToken', data.idToken)
+                dispatch(authActions.login())
+                dispatch(authActions.userId(data.localId))
+                dispatch(authActions.token(data.idToken))
                 navigate('/expensepage')
                
             }
