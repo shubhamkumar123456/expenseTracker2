@@ -1,26 +1,36 @@
 import React, { useEffect, useRef, useState } from "react";
 import classes from "./ExpensePage.module.css";
 import AddedExpenseItem from "./AddedExpenseItem";
+import { useSelector, useDispatch } from 'react-redux';
+import { expenseStates } from "../store/expenses-state";
+
+
 
 
 const ExpensePage = () => {
+
+  const dispatch=useDispatch()
+  // const expenseList = useSelector(state => state.expense.expenseList)
+  const expenseList = useSelector(state => state.expense.expenseList)
+  // console.log("expenseList = ",expenseList)
+  const idToken = useSelector(state=>state.auth.token)
+  const userID = useSelector(state=>state.auth.userId)
+  // console.log("idToken",idToken);
+  // console.log("userId",userID);
     const amountRef=useRef();
     const descriptionRef=useRef();
     const categoryRef=useRef();
     const idRef=useRef()
 
     const [item, setitem] = useState([]);
+    const [updated, setupdated] = useState(false);
 
-    useEffect(()=>{
-      const fetchData=async()=>{
-        const response=await fetch('https://expense-tracker-c65c2-default-rtdb.firebaseio.com/expenseItems.json',{
+    const fetchData=async()=>{
+        const response=await fetch(`https://expense-tracker-c65c2-default-rtdb.firebaseio.com/users/${userID}/expenses.json?auth=${idToken}`,{
           method: 'GET',
-          headers:{
-            'Content-Type': 'application/json'
-          }
         });
         const data=await response.json();
-        // console.log(data)
+        console.log(data)
         let arr=[];
         for(let key in data) {
           // console.log(key, data[key]);
@@ -35,10 +45,15 @@ const ExpensePage = () => {
         }
         // console.log(data)
         console.log(arr)
+        dispatch(expenseStates.setExpenseList(data));
         setitem(arr)
+       
       }
+
+    useEffect(()=>{
+      
       fetchData();
-     
+    
     },[])
 
 const handlesubmit=async(e)=>{
@@ -49,9 +64,9 @@ const handlesubmit=async(e)=>{
         description:descriptionRef.current.value,
         category:categoryRef.current.value
     }
-    // console.log(obj);
+  
   try {
-    const response=await fetch('https://expense-tracker-c65c2-default-rtdb.firebaseio.com/expenseItems.json',{
+    const response=await fetch(`https://expense-tracker-c65c2-default-rtdb.firebaseio.com/users/${userID}/expenses.json?auth=${idToken}`,{
       method: 'POST',
       body: JSON.stringify(obj),
       headers:{
@@ -59,13 +74,14 @@ const handlesubmit=async(e)=>{
       }
     })
     const data=await response.json();
-    console.log(data);
+    // console.log("dataName",data.name);
+    dispatch(expenseStates.addNewExpense({key:data.name , value:obj}))
   } catch (error) {
     console.log(error);
   }
+
   setitem([...item,obj])
 }
-// console.log(item)
 
   return (
     <div>
@@ -86,7 +102,7 @@ const handlesubmit=async(e)=>{
           Submit
         </button>
       </form>
-      <AddedExpenseItem item={item} />
+      <AddedExpenseItem item={expenseList} fetchData={fetchData} />
     </div>
   );
 };

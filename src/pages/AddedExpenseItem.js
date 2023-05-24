@@ -2,13 +2,37 @@ import React, { useRef, useState } from 'react'
 import classes from './AddedExpenseItem.module.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { themeState } from '../store/theme-reducer';
+import { expenseStates } from '../store/expenses-state';
 import Papa from 'papaparse';
 
 const AddedExpenseItem = (props) => {
+  const expenses=props.item;
+  // console.log("expenses = ", expenses)
+  const idToken = useSelector(state=>state.auth.token)
+  const userID = useSelector(state=>state.auth.userId)
+  // console.log("userId",userID)
+
+  const ExpensesList=[];
+  for(let key in expenses){
+    const description=expenses[key].description;
+    const category=expenses[key].category;
+    const amount=expenses[key].amount;
+    let obj={
+      id: key,
+      description,
+      category,
+      amount
+    }
+    // console.log(obj)
+    ExpensesList.push(obj)
+  }
+  console.log("ExpensesList = ",ExpensesList)
+
   const dispatch = useDispatch();
   const [updated, setupdated] = useState(false);
   const [itemId, setitemId] = useState(null);
   const [activate, setActivate] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   
   const isDarkMode = useSelector((state) => state.theme.darkMode);
   console.log(isDarkMode)
@@ -19,14 +43,14 @@ const AddedExpenseItem = (props) => {
 
   const handleEdit=(id)=>{
     // console.log(id)
-    setupdated(true)
+    setupdated(!updated)
     setitemId(id)
   }
 
   const handleUpdateSubmit=async(e)=>{
     e.preventDefault()
     console.log(itemId)
-    const response=fetch(`https://expense-tracker-c65c2-default-rtdb.firebaseio.com/expenseItems/${itemId}.json`,{
+    const response=await fetch(`https://expense-tracker-c65c2-default-rtdb.firebaseio.com/users/${userID}/expenses/${itemId}.json?auth=${idToken}`,{
       method:'PUT',
       body: JSON.stringify({
         amount:updatedAmountRef.current.value,
@@ -39,30 +63,36 @@ const AddedExpenseItem = (props) => {
     })
     if(response.ok){
       console.log("updated Successfully")
+      const data=await response.json()
+      console.log("data",data)
+      dispatch(expenseStates.addNewExpense({key:itemId , value:data}))
+      // props.setupdated(!updated)
+
     }
-
-
-    setupdated(false)
-
+    setupdated(!updated)
+   
   }
 
   const handleDelete=async(id)=>{
     console.log(id)
-   const response=await fetch(`https://expense-tracker-c65c2-default-rtdb.firebaseio.com/expenseItems/${id}.json`,{
+   const response=await fetch(`https://expense-tracker-c65c2-default-rtdb.firebaseio.com/users/${userID}/expenses/${id}.json?auth=${idToken}`,{
       method: 'DELETE',
       headers:{
         'Content-Type': 'application/json'
       }
     })
     if(response.ok){
-      console.log("deleted successfully")
-      
+      console.log("deleted successfully") 
+      dispatch(expenseStates.deleteExpense(id))
     }
+    setIsDeleted(!isDeleted)
   }
+
   let sum=0;
-  props.item.forEach((item)=>{
+  ExpensesList.forEach((item)=>{
     sum+=+item.amount
   })
+
   const convertObjectToCSV=(data)=>{
     const arr=[];
     console.log(data)
@@ -88,6 +118,7 @@ const AddedExpenseItem = (props) => {
     link.setAttribute('download', filename);
     link.click();
   }
+
   const activateHandler=()=>{
     setActivate(!activate)
   }
@@ -116,7 +147,7 @@ const AddedExpenseItem = (props) => {
       <p>Category</p>
      </div>
      
-      {props.item.map((ele)=>{
+      {ExpensesList.map((ele)=>{
       
         return(
             <div key={ele.id} className={classes.expenseItemItem}>

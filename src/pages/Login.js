@@ -34,9 +34,13 @@ const Login = () => {
                 let data=await response.json();
                 console.log(data)
                 localStorage.setItem('authToken', data.idToken)
-                dispatch(authActions.login())
-                dispatch(authActions.userId(data.localId))
-                dispatch(authActions.token(data.idToken))
+                localStorage.setItem('userId', data.localId)
+                // dispatch(authActions.login())
+                // dispatch(authActions.userId(data.localId))
+                // dispatch(authActions.token(data.idToken))
+                dispatch(authActions.Setlogin());
+                dispatch(authActions.setToken(data.idToken));
+                dispatch(authActions.setUserId(data.localId))
                 navigate('/expensepage')
                
             }
