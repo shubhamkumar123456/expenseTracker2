@@ -6,6 +6,14 @@
     border-radius: 10px;
     
 }
+.darktheme{
+   
+    background-color: grey;
+    width: 80%;
+    margin: 1rem auto;
+    color: white;
+    border-radius: 10px;
+}
 .headings{
     display: flex;
     gap:12rem;

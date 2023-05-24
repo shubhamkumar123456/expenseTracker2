@@ -1,11 +1,17 @@
 import React, { useRef, useState } from 'react'
 import classes from './AddedExpenseItem.module.css'
+import { useSelector, useDispatch } from 'react-redux';
+import { themeState } from '../store/theme-reducer';
+import Papa from 'papaparse';
 
 const AddedExpenseItem = (props) => {
-
+  const dispatch = useDispatch();
   const [updated, setupdated] = useState(false);
   const [itemId, setitemId] = useState(null);
-
+  const [activate, setActivate] = useState(false);
+  
+  const isDarkMode = useSelector((state) => state.theme.darkMode);
+  console.log(isDarkMode)
   const updatedAmountRef=useRef();
   const updateCategoryRef=useRef();
   const updatedDescriptionRef=useRef();
@@ -57,13 +63,59 @@ const AddedExpenseItem = (props) => {
   props.item.forEach((item)=>{
     sum+=+item.amount
   })
+  const convertObjectToCSV=(data)=>{
+    const arr=[];
+    console.log(data)
+    arr.push(["amount", "category", "description"]);
+
+    for (const name in data) {
+      const row = [];
+      // row.push(name);
+      row.push(data[name].amount);
+      row.push(data[name].category);
+      row.push(data[name].description)
+      arr.push(row);
+    }
+     return arr
+    }
+  
+  const downloadCsv=(filename, data)=>{
+    const csv = Papa.unparse(data);
+    const csvBlob = new Blob([csv], { type: 'text/csv' });
+    const csvUrl = URL.createObjectURL(csvBlob);
+    const link = document.createElement('a');
+    link.setAttribute('href', csvUrl);
+    link.setAttribute('download', filename);
+    link.click();
+  }
+  const activateHandler=()=>{
+    setActivate(!activate)
+  }
+
+  const activatePremiumHandler=(e)=>{
+    e.preventDefault()
+    console.log("premium handler activated")
+    dispatch(themeState.toggleTheme());
+  }
+  const downloadFileHandler=()=>{
+    const csvData = convertObjectToCSV(props.item);
+    downloadCsv('myExpense.csv', csvData);
+  }
+
   return (
-    <div className={classes.expenseItem}>
+
+    <div className={`${isDarkMode?classes.darktheme:classes.expenseItem}`}>
+      {sum>10000?<button onClick={activateHandler} >Activate Premium</button>:""}
+    {activate && <div>
+     {<button onClick={activatePremiumHandler}>Chnage theme</button>}
+     {<button onClick={downloadFileHandler}>Download File</button>}
+     </div>}
      <div className={classes.headings}>
       <p>Price</p>
       <p >Description</p>
       <p>Category</p>
      </div>
+     
       {props.item.map((ele)=>{
       
         return(
@@ -80,7 +132,7 @@ const AddedExpenseItem = (props) => {
     
       })}
       
-      <p>total={sum<10000 ? sum:<button>activate premium</button>}</p>
+      <p>total={sum}</p>
    {updated && <form action="" className={classes.updatedForm}>
         <h1>Enter the updated values here</h1>
         <label htmlFor="">Amount</label>
